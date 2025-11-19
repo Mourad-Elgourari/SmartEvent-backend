@@ -1,0 +1,25 @@
+package com.congress.event.model;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Table(name = "users")
+@Data
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column(nullable = false, unique = true)
+    private String username;
+    @Column(unique = true, nullable = false)
+    private String email;
+    @Column(nullable = false)
+    private String password;
+
+    private boolean enabled = false;
+
+
+
+}
