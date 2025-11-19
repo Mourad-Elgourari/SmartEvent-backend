@@ -1,11 +1,19 @@
 package com.congress.event.model;
 
+import com.congress.event.enums.Civility;
+import com.congress.event.enums.Role;
+import com.congress.event.enums.UserStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
 @Data
+@Inheritance(strategy = InheritanceType.JOINED)
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -19,6 +27,20 @@ public class User {
     private String password;
 
     private boolean enabled = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Civility civility = Civility.MR; // e.g., MR, MRS, MISS
+
+    private String photo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private UserStatus status; // e.g., ACTIVE, INACTIVE, BLOCKED
 
 
 
