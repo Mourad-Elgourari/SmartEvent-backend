@@ -1,7 +1,7 @@
 package com.congress.event.service;
 
-import conference.event.entity.Member;
-import conference.event.repository.MemberRepository;
+import com.congress.event.model.Member;
+import com.congress.event.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
