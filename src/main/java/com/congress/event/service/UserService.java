@@ -1,5 +1,6 @@
 package com.congress.event.service;
 
+import com.congress.event.enums.Role;
 import com.congress.event.model.PasswordResetToken;
 import com.congress.event.model.User;
 import com.congress.event.model.VerificationToken;
@@ -28,25 +29,55 @@ public class UserService {
     @Autowired
     private EmailService emailService;
 
-    public String registerUser(String username, String email, String password) {
+    public VerificationToken getVerificationToken(String token) {
+        return tokenRepository.findByToken(token);
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
+    }
+    public void deleteVerificationToken(VerificationToken token) {
+        tokenRepository.delete(token);
+    }
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
+
+    public User registerUser(String username, String email, String password) {
+        // Vérifie si le username existe déjà
+        if (userRepository.existsByUsername(username)) {
+            throw new RuntimeException("Le nom d'utilisateur est déjà utilisé !");
+        }
+
+        // Vérifie si l'email existe déjà
+        if (userRepository.existsByEmail(email)) {
+            throw new RuntimeException("L'email est déjà utilisé !");
+        }
+
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(new BCryptPasswordEncoder().encode(password));
+        user.setEnabled(false); // pas encore activé avant verification
+        user.setRole(Role.USER);
 
         userRepository.save(user);
 
+        // Génération du token de verification
         String token = UUID.randomUUID().toString();
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setToken(token);
         verificationToken.setUser(user);
-        verificationToken.setExpiryDate(LocalDateTime.now().plusHours(24)); // 24h
+        verificationToken.setExpiryDate(LocalDateTime.now().plusHours(24));
         tokenRepository.save(verificationToken);
 
         emailService.sendVerificationEmail(user.getEmail(), token);
 
-        return "Compte créé. Veuillez vérifier votre email.";
+        return user;
     }
+
+
 
     public String verifyUser(String token) {
         VerificationToken verificationToken = tokenRepository.findByToken(token);
