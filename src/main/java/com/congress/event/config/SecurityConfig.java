@@ -42,7 +42,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
 
                         // Admin only
+
                         .requestMatchers("/api/users/**").hasRole("ADMIN")
+                        .requestMatchers("/api/members/**").hasRole("ADMIN")
                         .requestMatchers("/api/events/**").hasRole("ADMIN")
                         .requestMatchers("/api/guests/**").hasRole("ADMIN")
 

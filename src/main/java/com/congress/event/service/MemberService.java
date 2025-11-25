@@ -1,5 +1,7 @@
 package com.congress.event.service;
 
+import com.congress.event.enums.Role;
+import com.congress.event.enums.UserStatus;
 import com.congress.event.model.Member;
 import com.congress.event.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,13 @@ public class MemberService {
     }
 
     public Member createMember(Member member) {
+        // Assign the MEMBER role by default
+        member.setRole(Role.MEMBER);
+
+        // Optionally, set status and enabled
+        member.setStatus(UserStatus.ACTIVE);
+        member.setEnabled(true);
+
         return memberRepository.save(member);
     }
 
