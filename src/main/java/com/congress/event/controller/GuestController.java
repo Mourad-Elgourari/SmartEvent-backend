@@ -1,6 +1,7 @@
 package com.congress.event.controller;
 
 import com.congress.event.model.Guest;
+import com.congress.event.repository.GuestRepository;
 import com.congress.event.service.GuestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 public class GuestController {
 
     private final GuestService guestService;
+    private final GuestRepository guestRepository;
 
     @GetMapping
     public List<Guest> getAllGuests() {
@@ -26,6 +28,11 @@ public class GuestController {
         return guestService.getGuestById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/count")
+    public Long getGuestsCount() {
+        return guestRepository.count();
     }
 
     @PostMapping

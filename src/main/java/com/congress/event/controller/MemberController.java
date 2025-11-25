@@ -1,6 +1,7 @@
 package com.congress.event.controller;
 
 import com.congress.event.model.Member;
+import com.congress.event.repository.MemberRepository;
 import com.congress.event.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @GetMapping
     public List<Member> getAllMembers() {
@@ -41,6 +43,10 @@ public class MemberController {
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+    @GetMapping("/count")
+    public Long getMembersCount() {
+        return memberRepository.count();
     }
 
     @DeleteMapping("/{id}")
