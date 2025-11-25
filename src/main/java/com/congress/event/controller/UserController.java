@@ -51,4 +51,12 @@ public class UserController {
         return userRepository.save(user);
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        userRepository.delete(user);
+    }
+
 }
