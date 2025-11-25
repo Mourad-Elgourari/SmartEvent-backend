@@ -1,6 +1,7 @@
 package com.congress.event.controller;
 
 import com.congress.event.model.Event;
+import com.congress.event.repository.EventRepository;
 import com.congress.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 public class EventController {
 
     private final EventService eventService;
+    private final EventRepository eventRepository;
 
     @GetMapping
     public List<Event> getAllEvents() {
@@ -26,6 +28,11 @@ public class EventController {
         return eventService.getEventById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/count")
+    public Long getEventsCount() {
+        return eventRepository.count();
     }
 
     @PostMapping
